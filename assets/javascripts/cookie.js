@@ -1,5 +1,7 @@
 (function() {
 	var newURL = '',
+		domain = window.location.host.split('.'),
+		currentDomain = '',
 		date = new Date(),
 		docCookies = {
 		getItem: function (sKey) {
@@ -42,8 +44,9 @@
 	};
 
 	if (docCookies.getItem('url_public') === null) {
-		console.log(window.location.host);
+		domain.shift();
+		currentDomain = domain.join('.');
 		newURL = window.location.protocol + "//" + window.location.host +  window.location.pathname;
-		docCookies.setItem('url_public', newURL, new Date(date.getFullYear(),date.getMonth(),date.getDate()+1), window.location.host);
+		docCookies.setItem('url_public', newURL, new Date(date.getFullYear(),date.getMonth(),date.getDate()+1), '.' + currentDomain);
 	}
 })();
