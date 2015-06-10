@@ -43,10 +43,12 @@
 		}
 	};
 
-	if (docCookies.getItem('url_public') === null) {
-		domain.shift();
-		currentDomain = domain.join('.');
-		newURL = window.location.protocol + "//" + window.location.host +  window.location.pathname;
-		docCookies.setItem('url_public', newURL, new Date(date.getFullYear(),date.getMonth(),date.getDate()+1),'', '.' + currentDomain);
+	if (docCookies.getItem('url_public') !== null) {
+		docCookies.removeItem("url_public");
 	}
+
+	domain.shift();
+	currentDomain = domain.join('.');
+	newURL = window.location.protocol + "//" + window.location.host +  window.location.pathname;
+	docCookies.setItem('url_public', newURL, new Date(date.getFullYear(),date.getMonth(),date.getDate()+1),'/', '.' + currentDomain);
 })();
