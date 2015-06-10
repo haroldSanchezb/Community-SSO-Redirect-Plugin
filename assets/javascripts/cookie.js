@@ -47,6 +47,6 @@
 		domain.shift();
 		currentDomain = domain.join('.');
 		newURL = window.location.protocol + "//" + window.location.host +  window.location.pathname;
-		docCookies.setItem('url_public', newURL, new Date(date.getFullYear(),date.getMonth(),date.getDate()+1), '.' + currentDomain);
+		docCookies.setItem('url_public', newURL, new Date(date.getFullYear(),date.getMonth(),date.getDate()+1),'', '.' + currentDomain);
 	}
 })();
