@@ -3,8 +3,6 @@
 # version: 0.1
 # authors: Harold Sanchez Balaguera
 
-register_asset 'javascripts/cookie.js'
-
 after_initialize do
 	SessionController.class_eval do
 		skip_before_filter :check_xhr, only: ['sso', 'sso_login', 'become', 'sso_provider', 'sso_redirect']
@@ -15,10 +13,8 @@ after_initialize do
 			unless user_cookie
 				sso = params[:sso]
 				sig = params[:sig]
-				return_url = Base64.encode64(CGI::escape(cookies[:url_public]))
+				return_url = Base64.encode64(CGI::escape(cookies[:destination_url]))
 				sso_login_url = SiteSetting.sso_redirect_login
-
-				cookies.delete :url_public
 
 				redirect_to "#{sso_login_url}?sso=#{sso}&sig=#{sig}&return=#{return_url}"
 			else 
