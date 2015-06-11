@@ -1,0 +1,3 @@
+en:
+    site_settings:
+        sso_redirect_login: "URL of single sign on endpoint"
