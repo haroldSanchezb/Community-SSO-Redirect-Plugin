@@ -43,12 +43,15 @@
 		}
 	};
 
-	if (docCookies.getItem('url_public') !== null) {
-		docCookies.removeItem("url_public");
+	if (docCookies.getItem('_t') === null) {
+		if (docCookies.getItem('url_public') !== null) {
+			docCookies.removeItem("url_public");
+		}
+
+		domain.shift();
+		currentDomain = domain.join('.');
+		newURL = window.location.protocol + "//" + window.location.host +  window.location.pathname;
+		docCookies.setItem('url_public', newURL, new Date(date.getFullYear(),date.getMonth(),date.getDate()+1),'/', '.' + currentDomain);
 	}
 
-	domain.shift();
-	currentDomain = domain.join('.');
-	newURL = window.location.protocol + "//" + window.location.host +  window.location.pathname;
-	docCookies.setItem('url_public', newURL, new Date(date.getFullYear(),date.getMonth(),date.getDate()+1),'/', '.' + currentDomain);
 })();

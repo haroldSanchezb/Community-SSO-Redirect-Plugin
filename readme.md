@@ -15,3 +15,13 @@ hooks:
 ```
 ./launcher rebuild app
 ```
+
+
+## Get Redirect URL:
+Inside login from campus.amazing.com
+
+to get url and redirect :
+
+```
+header('Location:'. urldecode(base64_decode(urldecode($_GET["return"]))));
+```
