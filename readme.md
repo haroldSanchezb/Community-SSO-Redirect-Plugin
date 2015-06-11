@@ -19,7 +19,7 @@ hooks:
 ## Settings in Community:
 
 * you must put the URL of single sign on endpoint:
-![screenshot](raw/master/screenshot.png)
+![screenshot](https://bitbucket.org/amazingacademy/community-sso-redirect-plugin/raw/master/screenshot.png)
 
 ## Settings for Campus amazing Login:
 Inside login from campus.amazing.com
