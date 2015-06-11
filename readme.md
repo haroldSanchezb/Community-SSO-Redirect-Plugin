@@ -16,8 +16,12 @@ hooks:
 ./launcher rebuild app
 ```
 
+## Settings in Community:
 
-## Get Redirect URL:
+* you must put the URL of single sign on endpoint:
+![screenshot](raw/master/screenshot.png)
+
+## Settings for Campus amazing Login:
 Inside login from campus.amazing.com
 
 to get url and redirect :
