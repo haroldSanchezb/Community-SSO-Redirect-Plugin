@@ -21,7 +21,7 @@ after_initialize do
 				Rails.logger.info "SiteSetting.sso_url #{SiteSetting.sso_url}"
 
 				sso_param = '?sso'
-				if SiteSetting.sso_url
+				unless SiteSetting.sso_url.blank?
 					sso_param = ' #{SiteSetting.sso_url}?sso'
 				end
 
