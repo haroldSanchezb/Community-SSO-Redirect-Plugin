@@ -20,7 +20,14 @@ after_initialize do
 				Rails.logger.info "uri_array #{uri_array}"
 				Rails.logger.info "SiteSetting.sso_url #{SiteSetting.sso_url}"
 
-				sso = CGI::escape(uri_array['?sso'])
+				sso_param = '?sso'
+				if SiteSetting.sso_url
+					sso_param = ' #{SiteSetting.sso_url}?sso'
+				end
+
+				Rails.logger.info "sso_param #{sso_param}"
+
+				sso = CGI::escape(uri_array[sso_param])
 				sig = uri_array['sig']
 
 				return_url = Base64.encode64(CGI::escape(request.host))
