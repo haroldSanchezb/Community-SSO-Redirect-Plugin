@@ -17,7 +17,9 @@ after_initialize do
 				nonce = DiscourseSingleSignOn.generate_url('/')
 				uri_array = Rack::Utils.parse_query(nonce)
 
-				sso = CGI::escape(uri_array['#{SiteSetting.sso_url}?sso'])
+				Rails.logger.info "uri_array #{uri_array}"
+
+				sso = CGI::escape(uri_array['?sso'])
 				sig = params[:sig]
 
 				return_url = Base64.encode64(CGI::escape(request.host))
