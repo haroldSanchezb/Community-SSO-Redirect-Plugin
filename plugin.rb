@@ -18,9 +18,10 @@ after_initialize do
 				uri_array = Rack::Utils.parse_query(nonce)
 
 				Rails.logger.info "uri_array #{uri_array}"
+				Rails.logger.info "SiteSetting.sso_url #{SiteSetting.sso_url}"
 
 				sso = CGI::escape(uri_array['?sso'])
-				sig = params[:sig]
+				sig = uri_array['sig']
 
 				return_url = Base64.encode64(CGI::escape(request.host))
 
@@ -29,6 +30,7 @@ after_initialize do
 				end
 
 				sso_login_url = SiteSetting.sso_redirect_login
+				Rails.logger.info "sso_login_url #{sso_login_url}"
 
 				redirect_to "#{sso_login_url}?sso=#{sso}&sig=#{sig}&return=#{return_url}"
 			else 
