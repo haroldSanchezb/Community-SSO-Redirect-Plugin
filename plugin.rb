@@ -14,20 +14,21 @@ after_initialize do
 			user_cookie = cookies[:_t]
 
 			unless user_cookie
-				nonce = DiscourseSingleSignOn.generate_url(params[:return_path] || '/')
+				nonce = DiscourseSingleSignOn.generate_url('/')
 				uri_array = Rack::Utils.parse_query(nonce)
 
-				render json: uri_array
+				sso = CGI::escape(uri_array['#{SiteSetting.sso_url}?sso'])
+				sig = params[:sig]
 
-				# return_url = Base64.encode64(CGI::escape(request.host))
+				return_url = Base64.encode64(CGI::escape(request.host))
 
-				# if cookies[:destination_url]
-					# return_url = Base64.encode64(CGI::escape(cookies[:destination_url]))
-				# end
+				if cookies[:destination_url]
+					return_url = Base64.encode64(cookies[:destination_url])
+				end
 
-				# sso_login_url = SiteSetting.sso_redirect_login
+				sso_login_url = SiteSetting.sso_redirect_login
 
-				# redirect_to "#{sso_login_url}?sso=#{sso}&sig=#{sig}&return=#{return_url}"
+				redirect_to "#{sso_login_url}?sso=#{sso}&sig=#{sig}&return=#{return_url}"
 			else 
 				redirect_to "/"
 			end
