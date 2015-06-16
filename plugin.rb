@@ -33,7 +33,7 @@ after_initialize do
 				return_url = Base64.encode64(CGI::escape(request.host))
 
 				if cookies[:destination_url]
-					return_url = Base64.encode64(cookies[:destination_url])
+					return_url = Base64.encode64(CGI::escape(cookies[:destination_url]))
 				end
 
 				sso_login_url = SiteSetting.sso_redirect_login
