@@ -5,9 +5,6 @@
 
 after_initialize do
 	SessionController.class_eval do
-
-		require_dependency 'single_sign_on'
-
 		skip_before_filter :check_xhr, only: ['sso', 'sso_login', 'become', 'sso_provider', 'sso_redirect']
 
 		def sso_redirect
