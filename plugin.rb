@@ -15,8 +15,8 @@ after_initialize do
 				url = DiscourseSingleSignOn.generate_url(params[:return_path] || path('/'))
 				return_url = Base64.encode64(CGI::escape(request.host))
 
-				if cookies[:url_public]
-					return_url = Base64.encode64(CGI::escape(cookies[:url_public]))
+				if cookies[:destination_url]
+					return_url = Base64.encode64(CGI::escape(cookies[:destination_url]))
 				end
 
 				redirect_to "#{url}&return=#{return_url}"
