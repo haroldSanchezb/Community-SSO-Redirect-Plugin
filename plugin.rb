@@ -18,6 +18,8 @@ after_initialize do
 					return_url = cookies[:destination_url].gsub! "http://#{Discourse.current_hostname}", ''
 				end
 
+				Rails.logger.info "return_url #{return_url}"
+
 				redirect_to DiscourseSingleSignOn.generate_url(return_url)
 			else
 				render nothing: true, status: 404
@@ -38,7 +40,11 @@ after_initialize do
       return render(text: I18n.t("sso.unknown_error"), status: 500)
     end
 
-    return_path = sso.return_path
+    if cookies[:destination_url]
+				return_path = cookies[:destination_url].gsub! "http://#{Discourse.current_hostname}", ''
+		else 
+    	return_path = sso.return_path
+		end
 		Rails.logger.info "return_path #{return_path}"
 
     sso.expire_nonce!
