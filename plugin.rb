@@ -12,15 +12,22 @@ after_initialize do
 
 		def sso
 			if SiteSetting.enable_sso
-				return_url = '/'
 
-				if cookies[:destination_url]
+				if params[:return_path]
+					return_url = params[:return_path]
+				elsif cookies[:destination_url]
 					return_url = cookies[:destination_url].gsub! "http://#{Discourse.current_hostname}", ''
+				else
+					return_url = '/'
 				end
 
 				Rails.logger.info "return_url #{return_url}"
 
-				redirect_to DiscourseSingleSignOn.generate_url(return_url)
+				url = DiscourseSingleSignOn.generate_url(return_url)
+
+				return_url = Base64.encode64(CGI::escape(return_url))
+
+				redirect_to "#{url}&return_path=#{return_url}"
 			else
 				render nothing: true, status: 404
 			end
@@ -40,9 +47,11 @@ after_initialize do
       return render(text: I18n.t("sso.unknown_error"), status: 500)
     end
 
-    if cookies[:destination_url]
-				return_path = cookies[:destination_url].gsub! "http://#{Discourse.current_hostname}", ''
-		else 
+    if params[:return_path]
+			return_path = CGI::unescape(Base64.decode64(params[:return_path]))
+		elsif cookies[:destination_url]
+			return_path = cookies[:destination_url].gsub! "http://#{Discourse.current_hostname}", ''
+		else
     	return_path = sso.return_path
 		end
 		Rails.logger.info "return_path #{return_path}"
