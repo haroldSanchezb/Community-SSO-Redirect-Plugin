@@ -12,14 +12,14 @@ after_initialize do
 
 		def sso
 			if SiteSetting.enable_sso
-				url = DiscourseSingleSignOn.generate_url(params[:return_path] || path('/'))
-				return_url = Base64.encode64(CGI::escape(request.host))
+
+				return_url = '/'
 
 				if cookies[:destination_url]
-					return_url = Base64.encode64(CGI::escape(cookies[:destination_url]))
+					return_url = cookies[:destination_url]
 				end
 
-				redirect_to "#{url}&return=#{return_url}"
+				redirect_to DiscourseSingleSignOn.generate_url(return_url)
 			else
 				render nothing: true, status: 404
 			end
