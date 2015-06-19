@@ -1,4 +1,0 @@
-sso_redirect:
-    sso_redirect_login:
-        client: false
-        default: ''
