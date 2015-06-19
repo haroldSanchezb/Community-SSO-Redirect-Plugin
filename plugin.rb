@@ -1,6 +1,6 @@
 # name: Community SSO Redirect Plugin
 # about: Create a cross subdomain cookie for Community and Campus 
-# version: 0.5
+# version: 0.6
 # authors: Harold Sanchez Balaguera
 
 after_initialize do
