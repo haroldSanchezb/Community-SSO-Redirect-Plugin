@@ -43,6 +43,7 @@ after_initialize do
 
     if cookies[:url_path]
 			return_path = cookies[:url_path].gsub! "http://#{Discourse.current_hostname}", ''
+      cookies.delete :url_path
 		elsif cookies[:destination_url]
 			return_path = cookies[:destination_url].gsub! "http://#{Discourse.current_hostname}", ''
 		else
