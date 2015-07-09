@@ -1,7 +1,8 @@
-# name: Community SSO Redirect Plugin
-# about: Create a cross subdomain cookie for Community and Campus 
+# name: Community SSO Redirect
+# about: Create a cross subdomain cookie for Community and Campus
 # version: 0.6
 # authors: Harold Sanchez Balaguera
+# url: https://bitbucket.org/amazingacademy/community-sso-redirect-plugin/
 
 after_initialize do
 	SessionController.class_eval do

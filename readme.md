@@ -15,12 +15,3 @@ hooks:
 ```
 ./launcher rebuild app
 ```
-
-## Settings for Campus amazing Login:
-Inside login from campus.amazing.com
-
-to get url and redirect :
-
-```
-header('Location:'. urldecode(base64_decode(urldecode($_GET["return"]))));
-```
