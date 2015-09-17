@@ -1,6 +1,6 @@
 # name: Community SSO Redirect
 # about: Create a cross subdomain cookie for Community and Campus
-# version: 0.6.5
+# version: 0.6.6
 # authors: Harold Sanchez Balaguera and Gustavo Scanferla
 # url: https://bitbucket.org/amazingacademy/community-sso-redirect-plugin/
 
@@ -53,15 +53,6 @@ after_initialize do
     Rails.logger.info "@@@@@@@@@@@@@@@@@@@@@@@@@@@ return_url 2: #{cookies[:amazing_return_url]}"
     puts "@@@@@@@@@@@@@@@@@@@@@@@@@@@ return_url 2: #{cookies[:amazing_return_url]}"
 
-    if cookies[:amazing_return_url]
-      return_path = cookies[:amazing_return_url].gsub! "http://#{Discourse.current_hostname}", ''
-      cookies.delete :amazing_return_url
-    elsif cookies[:destination_url]
-      return_path = cookies[:destination_url].gsub! "http://#{Discourse.current_hostname}", ''
-    else
-      return_path = sso.return_path
-    end
-
 
     sso.expire_nonce!
 
@@ -83,6 +74,9 @@ after_initialize do
         else
           log_on_user user
         end
+
+        return_path = cookies[:amazing_return_url]
+        cookies.delete :amazing_return_url
 
         Rails.logger.info "@@@@@@@@@@@@@@@@@@@@@@@@@@@ return_url 3 #{return_path}"
         puts "@@@@@@@@@@@@@@@@@@@@@@@@@@@ return_url 3 #{return_path}"
