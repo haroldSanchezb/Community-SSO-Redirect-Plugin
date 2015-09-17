@@ -1,6 +1,6 @@
 # name: Community SSO Redirect
 # about: Create a cross subdomain cookie for Community and Campus
-# version: 0.6.4
+# version: 0.6.5
 # authors: Harold Sanchez Balaguera and Gustavo Scanferla
 # url: https://bitbucket.org/amazingacademy/community-sso-redirect-plugin/
 
@@ -82,16 +82,6 @@ after_initialize do
           redirect_to users_account_created_path and return
         else
           log_on_user user
-        end
-
-        # If it's not a relative URL check the host
-        if return_path !~ /^\/[^\/]/
-          begin
-            uri = URI(return_path)
-            return_path = path("/") unless uri.host == Discourse.current_hostname
-          rescue
-            return_path = path("/")
-          end
         end
 
         Rails.logger.info "@@@@@@@@@@@@@@@@@@@@@@@@@@@ return_url 3 #{return_path}"
