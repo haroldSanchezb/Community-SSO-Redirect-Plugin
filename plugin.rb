@@ -1,7 +1,7 @@
 # name: Community SSO Redirect
 # about: Create a cross subdomain cookie for Community and Campus
-# version: 0.6
-# authors: Harold Sanchez Balaguera
+# version: 0.6.1
+# authors: Harold Sanchez Balaguera and Gustavo Scanferla
 # url: https://bitbucket.org/amazingacademy/community-sso-redirect-plugin/
 
 after_initialize do
@@ -11,24 +11,26 @@ after_initialize do
 
 		skip_before_filter :check_xhr, only: ['sso', 'sso_login', 'become', 'sso_provider']
 
-		def sso
-			if SiteSetting.enable_sso
+  	def sso
+      return_path = if params[:return_path]
+        params[:return_path]
+      elsif session[:destination_url]
+        URI::parse(session[:destination_url]).path
+      else
+        path('/')
+      end
 
-				unless cookies[:url_path]
-          cookies[:url_path] = { value: cookies[:destination_url], expires: 1.hour.from_now }
-        end
+      cookies[:amazing_return_url] = { value: return_path, expires: 1.hour.from_now }
+      #cookies[:amazing_return_url] = { value: cookies[:destination_url], expires: 1.hour.from_now }
 
-				Rails.logger.info "return_url #{cookies[:url_path]}"
+      if SiteSetting.enable_sso?
+        redirect_to DiscourseSingleSignOn.generate_url(return_path)
+      else
+        render nothing: true, status: 404
+      end
+    end
 
-				url = DiscourseSingleSignOn.generate_url(cookies[:url_path])
-
-				redirect_to "#{url}"
-			else
-				render nothing: true, status: 404
-			end
-		end
-
-		  def sso_login
+  def sso_login
     unless SiteSetting.enable_sso
       return render(nothing: true, status: 404)
     end
@@ -42,15 +44,16 @@ after_initialize do
       return render(text: I18n.t("sso.unknown_error"), status: 500)
     end
 
-    if cookies[:url_path]
-			return_path = cookies[:url_path].gsub! "http://#{Discourse.current_hostname}", ''
-      cookies.delete :url_path
-		elsif cookies[:destination_url]
-			return_path = cookies[:destination_url].gsub! "http://#{Discourse.current_hostname}", ''
-		else
-    	return_path = sso.return_path
-		end
-		Rails.logger.info "return_path #{return_path}"
+    if cookies[:amazing_return_url]
+      return_path = cookies[:amazing_return_url].gsub! "http://#{Discourse.current_hostname}", ''
+      cookies.delete :amazing_return_url
+    elsif cookies[:destination_url]
+      return_path = cookies[:destination_url].gsub! "http://#{Discourse.current_hostname}", ''
+    else
+      return_path = sso.return_path
+    end
+
+
 
     sso.expire_nonce!
 
