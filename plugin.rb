@@ -1,6 +1,6 @@
 # name: Community SSO Redirect
 # about: Create a cross subdomain cookie for Community and Campus
-# version: 0.6.2
+# version: 0.6.3
 # authors: Harold Sanchez Balaguera and Gustavo Scanferla
 # url: https://bitbucket.org/amazingacademy/community-sso-redirect-plugin/
 
@@ -20,8 +20,12 @@ after_initialize do
         path('/')
       end
 
-      #cookies[:amazing_return_url] = { value: return_path, expires: 1.hour.from_now }
-      cookies[:amazing_return_url] = { value: cookies[:destination_url], expires: 1.hour.from_now }
+      cookies[:amazing_return_url] = { value: return_path, expires: 1.hour.from_now }
+      #cookies[:amazing_return_url] = { value: cookies[:destination_url], expires: 1.hour.from_now }
+
+
+      Rails.logger.info "@@@@@@@@@@@@@@@@@@@@@@@@@@@ return_url: #{cookies[:amazing_return_url]}"
+      puts "@@@@@@@@@@@@@@@@@@@@@@@@@@@ return_url: #{cookies[:amazing_return_url]}"
 
       if SiteSetting.enable_sso?
         redirect_to DiscourseSingleSignOn.generate_url(return_path)
@@ -44,6 +48,9 @@ after_initialize do
       return render(text: I18n.t("sso.unknown_error"), status: 500)
     end
 
+    Rails.logger.info "@@@@@@@@@@@@@@@@@@@@@@@@@@@ return_url 2: #{cookies[:amazing_return_url]}"
+    puts "@@@@@@@@@@@@@@@@@@@@@@@@@@@ return_url 2: #{cookies[:amazing_return_url]}"
+
     if cookies[:amazing_return_url]
       return_path = cookies[:amazing_return_url].gsub! "http://#{Discourse.current_hostname}", ''
       cookies.delete :amazing_return_url
@@ -52,7 +59,6 @@ after_initialize do
     else
       return_path = sso.return_path
     end
-
 
 
     sso.expire_nonce!
@@ -85,6 +91,9 @@ after_initialize do
             return_path = path("/")
           end
         end
+
+        Rails.logger.info "@@@@@@@@@@@@@@@@@@@@@@@@@@@ return_url 3 #{return_path}"
+        puts "@@@@@@@@@@@@@@@@@@@@@@@@@@@ return_url 3 #{return_path}"
 
         redirect_to return_path
       else
