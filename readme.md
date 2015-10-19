@@ -8,7 +8,7 @@ hooks:
 			cd: $home/plugins
 			cmd:
 				- mkdir -p plugins
-				- git clone https://user:pass@bitbucket.org/amazingacademy/community-sso-redirect-plugin.git
+				- git clone https://user:pass@bitbucket.org/haroldsanchezb/community-sso-redirect-plugin.git
 ```
 
 * After:
